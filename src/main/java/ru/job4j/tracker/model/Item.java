@@ -56,13 +56,21 @@ public class Item {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Item item = (Item) o;
 
-        if (id != item.id) return false;
-        if (!name.equals(item.name)) return false;
+        if (id != item.id) {
+            return false;
+        }
+        if (!name.equals(item.name)) {
+            return false;
+        }
         return created != null ? created.equals(item.created) : item.created == null;
     }
 

@@ -46,7 +46,7 @@ public class StartUI {
                 new FindByNameAction(output),
                 new ExitAction()
         );
-        try(SqlTracker tracker = new SqlTracker()) {
+        try (SqlTracker tracker = new SqlTracker()) {
             tracker.init();
             new StartUI().init(validate, tracker, actions);
         } catch (Exception e) {
