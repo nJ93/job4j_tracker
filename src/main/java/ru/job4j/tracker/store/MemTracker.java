@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MemTracker {
+public class MemTracker implements Store {
 
     private final List<Item> items = new ArrayList<>();
 
