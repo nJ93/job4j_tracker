@@ -41,6 +41,14 @@ public class Item {
         this.name = name;
     }
 
+    public LocalDateTime getLocalDateTime() {
+        return created;
+    }
+
+    public void setLocalDateTime(LocalDateTime created) {
+        this.created = created;
+    }
+
     @Override
     public String toString() {
         return String.format("id: %s, name: %s, created: %s", id, name, FORMATTER.format(created));
@@ -48,18 +56,21 @@ public class Item {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
         Item item = (Item) o;
-        return Objects.equals(id, item.id) && Objects.equals(name, item.name);
+
+        if (id != item.id) return false;
+        if (!name.equals(item.name)) return false;
+        return created != null ? created.equals(item.created) : item.created == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        int result = id;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (created != null ? created.hashCode() : 0);
+        return result;
     }
 }

@@ -41,7 +41,7 @@ public class SqlTracker implements Store, AutoCloseable {
                          "INSERT INTO items (name, created) VALUES (?, ?)",
                          Statement.RETURN_GENERATED_KEYS)) {
       statement.setString(1, item.getName());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      statement.setTimestamp(2, Timestamp.valueOf(item.getLocalDateTime()));
       statement.execute();
       try (ResultSet resultSet = statement.getGeneratedKeys()) {
         if (resultSet.next()) {
@@ -60,7 +60,7 @@ public class SqlTracker implements Store, AutoCloseable {
     try (PreparedStatement statement =
                  cn.prepareStatement("UPDATE items SET name = ?, created = ? WHERE id = ?")) {
       statement.setString(1, item.getName());
-      statement.setTimestamp(2, new Timestamp(System.currentTimeMillis()));
+      statement.setTimestamp(2, Timestamp.valueOf(item.getLocalDateTime()));
       statement.setInt(3, id);
       result = statement.executeUpdate() > 0;
     } catch (SQLException e) {
@@ -110,17 +110,21 @@ public class SqlTracker implements Store, AutoCloseable {
       statement.setString(1, key);
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
-          items.add(new Item(
-                  resultSet.getInt("id"),
-                  resultSet.getString("name"),
-                  resultSet.getTimestamp("created").toLocalDateTime()
-          ));
+          items.add(getItemFromRs(resultSet));
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
     }
     return items;
+  }
+
+  private Item getItemFromRs(ResultSet resultSet) throws SQLException {
+    return new Item(
+            resultSet.getInt("id"),
+            resultSet.getString("name"),
+            resultSet.getTimestamp("created").toLocalDateTime()
+    );
   }
 
   @Override
@@ -131,11 +135,7 @@ public class SqlTracker implements Store, AutoCloseable {
       statement.setInt(1, id);
       try (ResultSet resultSet = statement.executeQuery()) {
         if (resultSet.next()) {
-          item = new Item(
-                  id,
-                  resultSet.getString("name"),
-                  resultSet.getTimestamp("created").toLocalDateTime()
-          );
+          item = getItemFromRs(resultSet);
         }
       }
     } catch (SQLException e) {
