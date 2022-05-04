@@ -13,7 +13,7 @@ public class Item {
 
     private String name;
 
-    private LocalDateTime created = LocalDateTime.now().withNano(0);
+    private LocalDateTime created = LocalDateTime.now();
 
     public Item(String name) {
         this.name = name;
@@ -22,7 +22,7 @@ public class Item {
     public Item(int id, String name, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.created = created.withNano(0);
+        this.created = created;
     }
 
     public int getId() {
@@ -63,11 +63,11 @@ public class Item {
             return false;
         }
         Item item = (Item) o;
-        return id == item.id && name.equals(item.name) && Objects.equals(created, item.created);
+        return id == item.id;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, created);
+        return Objects.hash(id);
     }
 }
