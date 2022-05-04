@@ -89,11 +89,7 @@ public class SqlTracker implements Store, AutoCloseable {
                  cn.prepareStatement("SELECT it.id, it.name, it.created FROM items it")) {
       try (ResultSet resultSet = statement.executeQuery()) {
         while (resultSet.next()) {
-          items.add(new Item(
-                  resultSet.getInt("id"),
-                  resultSet.getString("name"),
-                  resultSet.getTimestamp("created").toLocalDateTime()
-          ));
+          items.add(getItemFromRs(resultSet));
         }
       }
     } catch (SQLException e) {
@@ -119,14 +115,6 @@ public class SqlTracker implements Store, AutoCloseable {
     return items;
   }
 
-  private Item getItemFromRs(ResultSet resultSet) throws SQLException {
-    return new Item(
-            resultSet.getInt("id"),
-            resultSet.getString("name"),
-            resultSet.getTimestamp("created").toLocalDateTime()
-    );
-  }
-
   @Override
   public Item findById(int id) {
     Item item = null;
@@ -142,5 +130,13 @@ public class SqlTracker implements Store, AutoCloseable {
       e.printStackTrace();
     }
     return item;
+  }
+
+  private Item getItemFromRs(ResultSet resultSet) throws SQLException {
+    return new Item(
+            resultSet.getInt("id"),
+            resultSet.getString("name"),
+            resultSet.getTimestamp("created").toLocalDateTime()
+    );
   }
 }
