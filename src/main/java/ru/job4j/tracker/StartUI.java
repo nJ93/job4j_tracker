@@ -6,7 +6,6 @@ import ru.job4j.tracker.input.Input;
 import ru.job4j.tracker.input.ValidateInput;
 import ru.job4j.tracker.output.ConsoleOutput;
 import ru.job4j.tracker.output.Output;
-import ru.job4j.tracker.store.MemTracker;
 import ru.job4j.tracker.store.SqlTracker;
 import ru.job4j.tracker.store.Store;
 
@@ -44,6 +43,8 @@ public class StartUI {
                 new FindAllAction(output),
                 new FindByIdAction(output),
                 new FindByNameAction(output),
+                new CreateManyAction(output),
+                new DeleteAllAction(output),
                 new ExitAction()
         );
         try (SqlTracker tracker = new SqlTracker()) {
